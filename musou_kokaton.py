@@ -172,7 +172,7 @@ class NeoBeam(pg.sprite.Sprite):
     複数ビームに関するビーム
     """
     
-    def __init__(self, bird: Bird, num):
+    def __init__(self, bird: pg.Surface, num: int):
         """
         複数のビーム画像Surfaceを生成する
         引数1 bird：ビームを放つこうかとん
