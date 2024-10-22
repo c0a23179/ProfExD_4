@@ -117,6 +117,7 @@ class Bomb(pg.sprite.Sprite):
     """
     爆弾に関するクラス
     """
+    
     colors = [(255, 0, 0), (0, 255, 0), (0, 0, 255), (255, 255, 0), (255, 0, 255), (0, 255, 255)]
 
     def __init__(self, emy: "Enemy", bird: Bird):
