@@ -222,6 +222,20 @@ class Enemy(pg.sprite.Sprite):
             self.state = "stop"
         self.rect.move_ip(self.vx, self.vy)
 
+#実装2
+class Gravity(pg.sprite.Sprite):
+    def __init__(self,life=400):
+        super().__init__()
+        self.image = pg.Surface((WIDTH,HEIGHT))
+        self.image.fill((0,0,0))
+        self.image.set_alpha(128)
+        self.rect = self.image.get_rect()
+        self.life = life
+
+    def update(self):
+        self.life -= 1
+        if self.life <= 0:
+            self.kill()
 
 class Score:
     """
@@ -247,12 +261,15 @@ def main():
     screen = pg.display.set_mode((WIDTH, HEIGHT))
     bg_img = pg.image.load(f"fig/pg_bg.jpg")
     score = Score()
+    gravity = None
 
     bird = Bird(3, (900, 400))
     bombs = pg.sprite.Group()
     beams = pg.sprite.Group()
     exps = pg.sprite.Group()
     emys = pg.sprite.Group()
+
+    gravity = pg.sprite.Group()
 
     tmr = 0
     clock = pg.time.Clock()
@@ -288,7 +305,26 @@ def main():
             pg.display.update()
             time.sleep(2)
             return
+        
+        #実装2
+        if key_lst[pg.K_RETURN] and score.value >= 0:
+            if not gravity:
+                gravity.add(Gravity(400))
+                score.value -= 200
+            
+        for bomb in pg.sprite.groupcollide(bombs,gravity,True,False).keys():
+            exps.add(Explosion(bomb,50))
+            score.value += 1
 
+        for emy in pg.sprite.groupcollide(emys,gravity,True,False).keys():
+            exps.add(Explosion(emy,100))
+            score.value += 1
+
+            bird.change_img(6,screen)
+
+
+        gravity.draw(screen)
+        gravity.update()
         bird.update(key_lst, screen)
         beams.update()
         beams.draw(screen)
