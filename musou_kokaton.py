@@ -268,6 +268,11 @@ def main():
         if tmr%200 == 0:  # 200フレームに1回，敵機を出現させる
             emys.add(Enemy())
 
+        if key_lst[pg.K_LSHIFT] or key_lst[pg.K_RSHIFT]: # 演習問題1
+            bird.speed = 20
+        else:
+            bird.speed = 10
+
         for emy in emys:
             if emy.state == "stop" and tmr%emy.interval == 0:
                 # 敵機が停止状態に入ったら，intervalに応じて爆弾投下
