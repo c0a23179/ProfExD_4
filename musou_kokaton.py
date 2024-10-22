@@ -184,6 +184,9 @@ class NeoBeam(pg.sprite.Sprite):
         self.num = num
         
     def gen_beams(self):
+        """
+        複数のBeamインスタンスを生成
+        """
         beam_lst=[]
         dire_lst = list(range(-50, 51, int(100 / (self.num - 1))))
         for i in dire_lst:
