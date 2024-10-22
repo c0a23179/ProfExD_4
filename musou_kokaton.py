@@ -37,7 +37,6 @@ def calc_orientation(org: pg.Rect, dst: pg.Rect) -> tuple[float, float]:
     return x_diff/norm, y_diff/norm
 
 
-
 class Bird(pg.sprite.Sprite):
     """
     ゲームキャラクター（こうかとん）に関するクラス
@@ -186,6 +185,7 @@ class Beam(pg.sprite.Sprite):
         if check_bound(self.rect) != (True, True):
             self.kill()
 
+
 class NeoBeam(pg.sprite.Sprite):
     """
     複数ビームに関するビーム
@@ -301,6 +301,7 @@ class Score:
         self.image = self.font.render(f"Score: {self.value}", 0, self.color)
         screen.blit(self.image, self.rect)
 
+
 class EMP:
     """
     電磁パルス（EMP）に関するクラス
@@ -330,6 +331,7 @@ class EMP:
         screen.blit(overlay, (0, 0))
         pg.display.update()
         time.sleep(0.05)  # 0.05秒表示
+
 
 def main():
     pg.display.set_caption("真！こうかとん無双")
@@ -439,6 +441,7 @@ def main():
         pg.display.update()
         tmr += 1
         clock.tick(50)
+
 
 if __name__ == "__main__":
     pg.init()
