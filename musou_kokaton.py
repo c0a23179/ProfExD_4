@@ -48,6 +48,9 @@ class Bird(pg.sprite.Sprite):
         pg.K_RIGHT: (+1, 0),
     }
 
+    state = "normal" #演習問題4
+    hyper_life = 0
+
     def __init__(self, num: int, xy: tuple[int, int]):
         """
         こうかとん画像Surfaceを生成する
@@ -88,6 +91,7 @@ class Bird(pg.sprite.Sprite):
         引数1 key_lst：押下キーの真理値リスト
         引数2 screen：画面Surface
         """
+
         sum_mv = [0, 0]
         for k, mv in __class__.delta.items():
             if key_lst[k]:
@@ -99,6 +103,13 @@ class Bird(pg.sprite.Sprite):
         if not (sum_mv[0] == 0 and sum_mv[1] == 0):
             self.dire = tuple(sum_mv)
             self.image = self.imgs[self.dire]
+
+        if Bird.state == "hyper": # 演習問題4
+            self.image = pg.transform.laplacian(self.image)
+            Bird.hyper_life -= 1
+        if Bird.hyper_life < 0:
+            Bird.state = "normal"
+
         screen.blit(self.image, self.rect)
 
 
@@ -106,6 +117,7 @@ class Bomb(pg.sprite.Sprite):
     """
     爆弾に関するクラス
     """
+    
     colors = [(255, 0, 0), (0, 255, 0), (0, 0, 255), (255, 255, 0), (255, 0, 255), (0, 255, 255)]
 
     def __init__(self, emy: "Enemy", bird: Bird):
@@ -265,6 +277,11 @@ def main():
                 beams.add(Beam(bird))
         screen.blit(bg_img, [0, 0])
 
+        if key_lst[pg.K_RSHIFT] and (score.value >= 100): # 演習問題4
+            score.value -= 100
+            Bird.state = "hyper"
+            Bird.hyper_life = 500
+
         if tmr%200 == 0:  # 200フレームに1回，敵機を出現させる
             emys.add(Enemy())
 
@@ -282,12 +299,19 @@ def main():
             exps.add(Explosion(bomb, 50))  # 爆発エフェクト
             score.value += 1  # 1点アップ
 
-        if len(pg.sprite.spritecollide(bird, bombs, True)) != 0:
-            bird.change_img(8, screen) # こうかとん悲しみエフェクト
-            score.update(screen)
-            pg.display.update()
-            time.sleep(2)
-            return
+        check = pg.sprite.spritecollide(bird, bombs, True) # 演習問題4
+        if len(check) != 0:
+            if Bird.state == "hyper":
+                score.value += 1
+                for bomb in check:
+                    exps.add(Explosion(bomb, 50))
+            else:
+                if len(check) != 0: 
+                    bird.change_img(8, screen) # こうかとん悲しみエフェクト
+                    score.update(screen)
+                    pg.display.update()
+                    time.sleep(2)
+                    return
 
         bird.update(key_lst, screen)
         beams.update()
