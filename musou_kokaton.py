@@ -289,7 +289,7 @@ def main():
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 return 0
-            if key_lst[pg.K_SPACE]: 
+            if key_lst[pg.K_SPACE]: # 入力判定
                 if key_lst[pg.K_LSHIFT]:
                   beams.add(neobeam.gen_beams())
                 else:
