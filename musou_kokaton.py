@@ -410,7 +410,7 @@ def main():
             return
         
         #実装2
-        if key_lst[pg.K_RETURN] and score.value >= 0:
+        if key_lst[pg.K_RETURN] and score.value >= 200:
             if not gravity:
                 gravity.add(Gravity(400))
                 score.value -= 200
